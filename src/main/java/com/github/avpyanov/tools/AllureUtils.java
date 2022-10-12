@@ -1,7 +1,8 @@
 package com.github.avpyanov.tools;
 
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import io.qameta.allure.model.Label;
 import io.qameta.allure.model.Link;
 import io.qameta.allure.model.Parameter;
@@ -11,8 +12,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
@@ -69,16 +70,6 @@ public class AllureUtils {
     }
 
 
-    public static TestResult getResultsFromAllureFile(String allureResultsPattern, final String fileName) {
-        final String filePath = String.format(allureResultsPattern, fileName);
-        try {
-            return new Gson().fromJson(new FileReader(filePath), TestResult.class);
-        } catch (FileNotFoundException e) {
-            logger.error("Не удалось прочитать результат из  файла {}: {}", fileName, e.getMessage());
-        }
-        return null;
-    }
-
     public static File[] getAllureReportFiles() {
         return new File(AllureConfig.getAllureFolder()).listFiles();
     }
@@ -93,9 +84,12 @@ public class AllureUtils {
 
     public static TestResult getResultsFromFile(final String fileName) {
         final String filePath = String.format(AllureConfig.getAllureResultsPattern(), fileName);
+        JsonMapper jsonMapper = JsonMapper.builder()
+                .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true)
+                .build();
         try {
-            return new Gson().fromJson(new FileReader(filePath), TestResult.class);
-        } catch (FileNotFoundException e) {
+            return jsonMapper.readValue(Paths.get(filePath).toFile(), TestResult.class);
+        } catch (IOException e) {
             logger.error("Ошибка при чтении из файла {}: {}", fileName, e);
         }
         return null;
