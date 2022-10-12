@@ -1,19 +1,28 @@
 package com.github.avpyanov.tools;
 
 
+import com.google.gson.Gson;
 import io.qameta.allure.model.Label;
 import io.qameta.allure.model.Link;
 import io.qameta.allure.model.Parameter;
 import io.qameta.allure.model.TestResult;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class AllureUtils {
+
+    private static final Logger logger = LogManager.getLogger(AllureUtils.class);
 
     public static String getTestId(TestResult result, String type) {
         Link link = result.getLinks()
@@ -57,6 +66,39 @@ public class AllureUtils {
     public static Map<String, String> getParameters(List<Parameter> parameters) {
         return parameters.stream()
                 .collect(Collectors.toMap(Parameter::getName, Parameter::getValue));
+    }
+
+
+    public static TestResult getResultsFromAllureFile(String allureResultsPattern, final String fileName) {
+        final String filePath = String.format(allureResultsPattern, fileName);
+        try {
+            return new Gson().fromJson(new FileReader(filePath), TestResult.class);
+        } catch (FileNotFoundException e) {
+            logger.error("Не удалось прочитать результат из  файла {}: {}", fileName, e.getMessage());
+        }
+        return null;
+    }
+
+    public static File[] getAllureReportFiles() {
+        return new File(AllureConfig.getAllureFolder()).listFiles();
+    }
+
+    public static List<String> getAllureResults(File[] files) {
+        return Stream.of(files)
+                .filter(file -> !file.isDirectory())
+                .map(File::getName)
+                .filter(name -> name.contains("result"))
+                .collect(Collectors.toList());
+    }
+
+    public static TestResult getResultsFromFile(final String fileName) {
+        final String filePath = String.format(AllureConfig.getAllureResultsPattern(), fileName);
+        try {
+            return new Gson().fromJson(new FileReader(filePath), TestResult.class);
+        } catch (FileNotFoundException e) {
+            logger.error("Ошибка при чтении из файла {}: {}", fileName, e);
+        }
+        return null;
     }
 
     private AllureUtils() {
