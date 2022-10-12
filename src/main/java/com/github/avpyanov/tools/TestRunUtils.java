@@ -44,10 +44,10 @@ public class TestRunUtils {
                     } else {
                         AutotestResults resultsFromAllure = getResultsFromAllure(result);
                         resultsFromAllure.configurationId(configurationId);
-                        String externalId = getClassName(result);
-                        List<AutotestResultsStep> fixtures = TestFixtures.getFixtures(externalId);
+                        String className = getClassName(result);
+                        List<AutotestResultsStep> fixtures = TestFixtures.getFixtures(className);
                         resultsFromAllure.setupResults(fixtures);
-                        resultsFromAllure.autoTestExternalId(externalId);
+                        resultsFromAllure.autoTestExternalId(result.getFullName());
                         autotestResultsList.add(resultsFromAllure);
                     }
                 }
