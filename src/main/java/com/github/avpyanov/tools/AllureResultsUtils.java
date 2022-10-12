@@ -13,7 +13,7 @@ import static com.github.avpyanov.tools.AttachmentsUtils.uploadAttachments;
 
 public class AllureResultsUtils {
 
-    public AutotestResults getResultsFromAllure(TestResult testResult) {
+    public static AutotestResults getResultsFromAllure(TestResult testResult) {
         AutotestResults autotestResults = new AutotestResults();
         autotestResults.startedOn(convertTimestampToDate(testResult.getStart()))
                 .completedOn(convertTimestampToDate(testResult.getStop()))
@@ -32,5 +32,8 @@ public class AllureResultsUtils {
 
         autotestResults.stepResults(autotestResultsSteps);
         return autotestResults;
+    }
+
+    private AllureResultsUtils() {
     }
 }
