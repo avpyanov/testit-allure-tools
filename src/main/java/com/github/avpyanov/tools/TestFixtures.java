@@ -43,8 +43,6 @@ public class TestFixtures {
             } else {
                 steps.addAll(getClassAndMethodFixtures(containerFilesList, className));
             }
-            List<AutotestResultsStep> methodFixtures = getMethodFixtures(containerFilesList, className);
-            steps.addAll(methodFixtures);
         }
         return steps;
     }

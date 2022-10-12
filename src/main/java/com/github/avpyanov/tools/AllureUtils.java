@@ -1,6 +1,7 @@
 package com.github.avpyanov.tools;
 
 
+import io.qameta.allure.model.Label;
 import io.qameta.allure.model.Link;
 import io.qameta.allure.model.Parameter;
 import io.qameta.allure.model.TestResult;
@@ -23,6 +24,18 @@ public class AllureUtils {
 
         if (link != null) {
             return link.getName();
+        } else return "";
+    }
+
+    public static String getClassName(TestResult result) {
+        Label label = result.getLabels()
+                .stream()
+                .filter(l -> l.getName().equals("testClass"))
+                .findFirst()
+                .orElse(null);
+
+        if (label != null) {
+            return label.getValue();
         } else return "";
     }
 
