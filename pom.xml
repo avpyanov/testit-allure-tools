@@ -21,14 +21,6 @@
         <feign.form.version>3.8.0</feign.form.version>
         <lombok.version>1.18.22</lombok.version>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
-
     <build>
         <plugins>
             <plugin>
