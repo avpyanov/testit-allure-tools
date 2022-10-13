@@ -3,7 +3,7 @@ package com.github.avpyanov.tools;
 import org.aeonbits.owner.Config;
 
 @Config.LoadPolicy(Config.LoadType.MERGE)
-@Config.Sources({"classpath:testit.properties",
+@Config.Sources({"classpath:testit-allure.properties",
         "system:env"})
 public interface Settings extends Config {
 
