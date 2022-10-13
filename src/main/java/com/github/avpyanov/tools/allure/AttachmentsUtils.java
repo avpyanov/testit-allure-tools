@@ -1,6 +1,9 @@
-package com.github.avpyanov.tools;
+package com.github.avpyanov.tools.allure;
 
-import com.github.avpyanov.testit.client.dto.Attachment;
+import com.github.avpyanov.tools.Settings;
+import com.github.avpyanov.tools.testit.client.TestItApiClient;
+import com.github.avpyanov.tools.testit.client.dto.Attachment;
+import org.aeonbits.owner.ConfigFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,14 +16,16 @@ public class AttachmentsUtils {
 
     private static final Logger logger = LogManager.getLogger(AttachmentsUtils.class);
 
+    private static final Settings settings = ConfigFactory.create(Settings.class);
+    private static final TestItApiClient testItClient = new TestItApiClient(settings.endpoint(), settings.token());
+
 
     public static List<Attachment> uploadAttachments(final List<io.qameta.allure.model.Attachment> allureAttachmentList) {
         List<Attachment> attachments = new ArrayList<>();
         for (io.qameta.allure.model.Attachment attachment : allureAttachmentList) {
-            String filePath = String.format(AllureConfig.getAllureResultsPattern(), attachment.getSource());
+            String filePath = String.format(settings.allureResultsPattern(), attachment.getSource());
             try {
-                com.github.avpyanov.testit.client.dto.Attachment uploadedAttachment = AllureConfig.getTestItApiClient()
-                        .attachmentsApi().createAttachment(new File(filePath));
+                Attachment uploadedAttachment = testItClient.attachmentsApi().createAttachment(new File(filePath));
                 attachments.add(uploadedAttachment);
             } catch (Exception e) {
                 logger.error("Не удалось загрузить вложение {}, {}", filePath, e);

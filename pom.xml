@@ -12,10 +12,14 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <allure.version>2.19.0</allure.version>
-        <testit.version>0.1</testit.version>
         <apache.commons.lang.version>3.12.0</apache.commons.lang.version>
         <log4j.version>2.17.2</log4j.version>
         <jackson.version>2.13.4</jackson.version>
+        <testng.version>7.6.1</testng.version>
+        <owner.version>1.0.12</owner.version>
+        <feign.version>11.8</feign.version>
+        <feign.form.version>3.8.0</feign.form.version>
+        <lombok.version>1.18.22</lombok.version>
     </properties>
 
     <repositories>
@@ -35,6 +39,13 @@
                     <source>11</source>
                     <target>11</target>
                     <encoding>UTF-8</encoding>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
             <plugin>
@@ -55,13 +66,19 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.avpyanov</groupId>
-            <artifactId>testit-client</artifactId>
-            <version>v0.3.1</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-model</artifactId>
+            <version>${allure.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-java-commons</artifactId>
             <version>${allure.version}</version>
         </dependency>
         <dependency>
@@ -88,6 +105,55 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
             <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+        <groupId>org.testng</groupId>
+        <artifactId>testng</artifactId>
+        <version>${testng.version}</version>
+        <exclusions>
+            <exclusion>
+                <groupId>org.webjars</groupId>
+                <artifactId>jquery</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>com.beust</groupId>
+                <artifactId>jcommander</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+            </exclusion>
+        </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.aeonbits.owner</groupId>
+            <artifactId>owner</artifactId>
+            <version>${owner.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-gson</artifactId>
+            <version>${feign.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-okhttp</artifactId>
+            <version>${feign.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.github.openfeign</groupId>
+                    <artifactId>feign-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign.form</groupId>
+            <artifactId>feign-form</artifactId>
+            <version>${feign.form.version}</version>
         </dependency>
     </dependencies>
 </project>

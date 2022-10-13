@@ -1,12 +1,13 @@
-package com.github.avpyanov.tools;
-
+package com.github.avpyanov.tools.allure;
 
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.github.avpyanov.tools.Settings;
 import io.qameta.allure.model.Label;
 import io.qameta.allure.model.Link;
 import io.qameta.allure.model.Parameter;
 import io.qameta.allure.model.TestResult;
+import org.aeonbits.owner.ConfigFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,6 +25,8 @@ import java.util.stream.Stream;
 public class AllureUtils {
 
     private static final Logger logger = LogManager.getLogger(AllureUtils.class);
+
+    private static final Settings settings = ConfigFactory.create(Settings.class);
 
     public static String getTestId(TestResult result, String type) {
         Link link = result.getLinks()
@@ -71,7 +74,7 @@ public class AllureUtils {
 
 
     public static File[] getAllureReportFiles() {
-        return new File(AllureConfig.getAllureFolder()).listFiles();
+        return new File(settings.allureFolder()).listFiles();
     }
 
     public static List<String> getAllureResults(File[] files) {
@@ -83,7 +86,7 @@ public class AllureUtils {
     }
 
     public static TestResult getResultsFromFile(final String fileName) {
-        final String filePath = String.format(AllureConfig.getAllureResultsPattern(), fileName);
+        final String filePath = String.format(settings.allureResultsPattern(), fileName);
         JsonMapper jsonMapper = JsonMapper.builder()
                 .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true)
                 .build();

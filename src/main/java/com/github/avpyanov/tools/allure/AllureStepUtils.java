@@ -1,15 +1,14 @@
-package com.github.avpyanov.tools;
+package com.github.avpyanov.tools.allure;
 
-
-import com.github.avpyanov.testit.client.dto.Attachment;
-import com.github.avpyanov.testit.client.dto.AutotestResultsStep;
+import com.github.avpyanov.tools.testit.client.dto.Attachment;
+import com.github.avpyanov.tools.testit.client.dto.AutotestResultsStep;
 import io.qameta.allure.model.FixtureResult;
 import io.qameta.allure.model.StepResult;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.avpyanov.tools.AllureUtils.*;
+import static com.github.avpyanov.tools.allure.AllureUtils.*;
 
 public class AllureStepUtils {
 
