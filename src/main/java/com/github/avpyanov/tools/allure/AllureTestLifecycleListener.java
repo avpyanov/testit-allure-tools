@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.avpyanov.tools.allure.AllureResultsUtils.getResultsFromAllure;
+import static com.github.avpyanov.tools.allure.AllureUtils.getTestId;
 import static com.github.avpyanov.tools.allure.TestRunUtils.getConfigurationId;
 
 public class AllureTestLifecycleListener implements TestLifecycleListener {
@@ -23,15 +24,18 @@ public class AllureTestLifecycleListener implements TestLifecycleListener {
     @Override
     public void afterTestStop(TestResult result) {
         if (settings.testRunId() != null) {
-            final List<AutotestResults> autotestResultsList = new ArrayList<>();
-            String configurationId = getConfigurationId(settings.testRunId());
-            AutotestResults resultsFromAllure = getResultsFromAllure(result);
-            resultsFromAllure.configurationId(configurationId);
-            resultsFromAllure.autoTestExternalId(result.getFullName());
-            autotestResultsList.add(resultsFromAllure);
-            TestRunUtils.uploadTestResults(settings.testRunId(), autotestResultsList);
-        } else {
-            logger.warn("Не указана аннотация @AutotestId для {}", result.getFullName());
+            final String testCaseId = getTestId(result, "autotest");
+            if (!testCaseId.isEmpty()) {
+                final List<AutotestResults> autotestResultsList = new ArrayList<>();
+                String configurationId = getConfigurationId(settings.testRunId());
+                AutotestResults resultsFromAllure = getResultsFromAllure(result);
+                resultsFromAllure.configurationId(configurationId);
+                resultsFromAllure.autoTestExternalId(result.getFullName());
+                autotestResultsList.add(resultsFromAllure);
+                TestRunUtils.uploadTestResults(settings.testRunId(), autotestResultsList);
+            } else {
+                logger.warn("Не указана аннотация @AutotestId для {}", result.getFullName());
+            }
         }
     }
 }
